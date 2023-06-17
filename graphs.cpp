@@ -86,6 +86,24 @@ bool isCycleUndirected(vector<vector<edge> > &graph, vector<bool> &vis, int curr
     return false;
 }
 
+bool isCycleDirected(vector<vector<edge> > &graph2, int curr, vector<bool> &vis, vector<bool> &rec) {
+    vis[curr] = true;
+    rec[curr] = true;
+
+    for(int i = 0; i<graph2[curr].size(); i++) {
+        edge e = graph2[curr][i];
+        if (rec[e.des]) {
+            return 1;
+        } else if (!vis[e.des]) {
+            if (isCycleDirected(graph2, e.des, vis, rec)) {
+                return true;
+            }
+        }
+    }
+    rec[curr] = false;
+    return false;
+}
+
 int main() {
     
     int v; cin>>v;
@@ -136,6 +154,23 @@ int main() {
     cout<<endl;
     vector<bool> vis3(v);
     if (isCycleUndirected(graph, vis3, graph[0][0].src, -1)) {
+        cout<<"YES"<<endl;
+    } else {
+        cout<<"NO"<<endl;
+    }
+
+// Cyle Detection in Directed graph using DFS approach
+    int v2; cin>>v2;
+    vector<vector<edge> > directedGraph(v2);
+    int s, d;
+    for(int i = 0; i<v2; i++) {
+        cin>>s>>d;
+        edge e(s, d);
+        directedGraph[s].push_back(e);
+    }
+    vector<bool> vis3(v2);
+    vector<bool> rec(v2);
+    if (isCycleDirected(directedGraph, 0, vis3, rec)) {
         cout<<"YES"<<endl;
     } else {
         cout<<"NO"<<endl;
