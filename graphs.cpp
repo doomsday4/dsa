@@ -93,11 +93,9 @@ bool isCycleDirected(vector<vector<edge> > &graph2, int curr, vector<bool> &vis,
     for(int i = 0; i<graph2[curr].size(); i++) {
         edge e = graph2[curr][i];
         if (rec[e.des]) {
-            return 1;
-        } else if (!vis[e.des]) {
-            if (isCycleDirected(graph2, e.des, vis, rec)) {
-                return true;
-            }
+            return true;
+        } else if (!vis[e.des] && isCycleDirected(graph2, e.des, vis, rec)) {
+            return true;
         }
     }
     rec[curr] = false;
@@ -160,6 +158,7 @@ int main() {
     }
 
 // Cyle Detection in Directed graph using DFS approach
+    int nodes; cin>>nodes;
     int v2; cin>>v2;
     vector<vector<edge> > directedGraph(v2);
     int s, d;
@@ -168,13 +167,17 @@ int main() {
         edge e(s, d);
         directedGraph[s].push_back(e);
     }
+
     vector<bool> vis3(v2);
     vector<bool> rec(v2);
+
     if (isCycleDirected(directedGraph, 0, vis3, rec)) {
         cout<<"YES"<<endl;
     } else {
         cout<<"NO"<<endl;
     }
+    // If the graph is diconnected- make the visited array in the main function and call the function 
+    // for every node for which visited is false.
 
     return 0;
 }
